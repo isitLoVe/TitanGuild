@@ -48,15 +48,15 @@ else
 end
 
 -- sort options
-sortChoicesValues = {"Name","Zone","Rank","Note","Level","Class"};
+sortChoicesValues = {"Name","Zone","Rank","Note","Level","Class","Ratio"};
 sortChoicesLabels = {};
 -- init sortChoices
 if (GetLocale() == "deDE") then
-	sortChoicesLabels = {"Name","Zone","Rang","Hinweis","Stufe","Klasse"};
+	sortChoicesLabels = {"Name","Zone","Rang","Hinweis","Stufe","Klasse","Ratio"};
 elseif (GetLocale() == "frFR") then
-	sortChoicesLabels = {"Nom","Zone","Rang","Note","Niveau","Classe"};
+	sortChoicesLabels = {"Nom","Zone","Rang","Note","Niveau","Classe","Ratio"};
 else
-	sortChoicesLabels = {"Name","Zone","Rank","Note","Level","Class"};
+	sortChoicesLabels = {"Name","Zone","Rank","Note","Level","Class","Ratio"};
 end
 
 -- class filter options
