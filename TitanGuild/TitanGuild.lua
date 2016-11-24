@@ -38,7 +38,7 @@ TITAN_GUILD_BUTTON_BACKWARDPAGE = "TitanPanelGuildButton_PageBackward";
 
 -- threshold for leaf level items in right-click menu
 TITAN_GUILD_LIST_THRESHOLD = 15;
-TITAN_GUILD_TOOLTIP_THRESHOLD = 26;
+TITAN_GUILD_TOOLTIP_THRESHOLD = 40;
 
 -- my internal timer used to keep track of when to run GuildRoster()
 guild_TimeCounter = 0;
@@ -88,6 +88,7 @@ function TitanPanelGuildButton_OnLoad()
 			ShowTooltipName = 1,
 			ShowTooltipZone = 1,
 			ShowTooltipRank = 1,
+			ShowTooltipRatio = 1,
 			ShowTooltipNote = TITAN_NIL,
 			ShowTooltipLevel = 1,
 			ShowTooltipClass = 1,
@@ -256,12 +257,15 @@ function TitanPanelGuildButton_GetTooltipText()
 	local guild_zone = "";
 	local guild_note = "";
 	local guild_officernote = "";
+	local guild_ratio = "";
 	local guild_online = "";
 	local guild_status = "";
 	local guildIndex;
 	local richRankText = " ";
 	local showWarning = 0;
 	local rowCount = 0;
+	local epgpextract = "^(%d+)/(%d+)";
+	
 	-- player is in a guild, construct the tooltip text
 	if (IsInGuild()) then
 		tooltipRichText = TitanUtils_GetNormalText(GetGuildInfo("player"));
@@ -280,11 +284,16 @@ function TitanPanelGuildButton_GetTooltipText()
 		end
 		if (TitanGetVar(TITAN_GUILD_ID, "FilterClasses")) then
 			tooltipRichText = tooltipRichText..TITAN_GUILD_MENU_FILTER_CLASS..": "..TitanGetVar(TITAN_GUILD_ID, "FilterClasses").."\n";
-		end		
+		end	
 		NumGuild = GetNumGuildMembers();
 		for guildIndex=1, NumGuild do
 			guild_name, guild_rank, guild_rankIndex, guild_level, guild_class, guild_zone, guild_note, guild_officernote, guild_online, guild_status = GetGuildRosterInfo(guildIndex);
 			richRankText = TitanPanelGuildButton_ColorRankNameText(guild_rankIndex, guild_rank);
+			_, _, ep, gp = string.find(guild_officernote, epgpextract)
+			if ep and gp then 
+				ratio = ep / gp
+				ratio = math.floor((ratio * 10^3) + 0.5) / (10^3)
+			end
 			-- on game load, the zone info is sometimes unknown
 			if (not guild_zone) then
 				guild_zone = " . ";
@@ -304,6 +313,11 @@ function TitanPanelGuildButton_GetTooltipText()
 					if (TitanGetVar(TITAN_GUILD_ID, "ShowTooltipNote")) then
 						if (guild_note ~= "") then
 							tooltipRichText = tooltipRichText..TitanUtils_GetColoredText(" ("..guild_note..")", TG.Color["gray"]).."\t";
+						end
+					end
+					if (TitanGetVar(TITAN_GUILD_ID, "ShowTooltipRatio")) then
+						if ratio then
+							tooltipRichText = tooltipRichText.." "..TitanUtils_GetColoredText(ratio, TG.Color["gray"]).."\t";
 						else
 							tooltipRichText = tooltipRichText.."\t";
 						end

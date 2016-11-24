@@ -1,5 +1,5 @@
 ## Interface: 11200
-## Title: Titan Panel [Guild]
+## Title: Titan Panel [Guild+EPGP]
 ## Notes: A simple guild list for the Titan Panel AddOn.
 ## Author: chicogrande (jluzier@gmail.com)
 ## SavedVariables: 
